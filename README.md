@@ -1,6 +1,6 @@
 # Move an edtech OpenAI client to a compatible gateway
 
-Keep the official OpenAI TypeScript client and point `baseURL` at Infrai; course rules stay deterministic in the service, while `model: "auto"` turns the resulting delivery decision into a short educator report. Infrai gives you one api for the whole capability set, so a single `INFRAI_API_KEY` also gives the team one credential for the broader capability set, and later agent tools don't need another provider integration.
+Keep the official OpenAI TypeScript client and point `baseURL` at Infrai; course rules stay deterministic in the service, while `model: "auto"` turns the resulting delivery decision into a short educator report. A single `INFRAI_API_KEY` also gives the team one credential for the broader capability set, so later agent tools do not require another provider integration.
 
 ## Run the course decision
 
@@ -30,9 +30,9 @@ The response contains the rule-owned `decision` and the model-written `narrative
 
 ## The boundary that matters
 
-`src/course_delivery.ts` owns deadlines, completion, and the visible state transition; `src/edtech_gateway.ts` owns the OpenAI-compatible client. This split is deliberate from an agent orchestration view: tools may phrase or route an already-made decision, but they don't quietly redefine policy.
+`src/course_delivery.ts` owns deadlines, completion, and the visible state transition; `src/edtech_gateway.ts` owns the OpenAI-compatible client. This separation is deliberate from an agent orchestration perspective: tools may phrase or route an already-made decision, but they do not quietly redefine policy.
 
-The one real gotcha in this migration is configuration drift. Every deployed process must receive `INFRAI_API_KEY` and the Infrai `baseURL`, not leave one worker on the incumbent endpoint. The official client is configured with retries for rate-limited requests, including server-provided retry timing, and the service maps client-side gateway rejections back to client responses.
+The one real gotcha in this migration is configuration drift: every deployed process must receive `INFRAI_API_KEY` and the Infrai `baseURL`, rather than leaving one worker on the incumbent endpoint. The official client is configured with retries for rate-limited requests, including server-provided retry timing, and the service maps client-side gateway rejections back to client responses.
 
 ## Verify the business rule
 
@@ -41,7 +41,7 @@ npm test
 npm run typecheck
 ```
 
-The focused test supplies the same six-unit course at a fixed clock time and expects `at_risk`, `3` remaining units, and the educator follow-up action. It also proves the brief writer receives that exact status instead of deciding one itself.
+The focused test supplies the same six-unit course at a fixed clock time and expects `at_risk`, `3` remaining units, and the educator follow-up action. It also proves that the brief writer receives that exact status instead of deciding one itself.
 
 ## Cut over, then keep a clean return path
 
